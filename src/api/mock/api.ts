@@ -1,9 +1,11 @@
 import type { CatalogDataset } from '@/types/catalog';
 import type { ReportDefinition, SavedReport, QueryResult } from '@/types/report';
+import type { ColumnLabel } from '@/types/labels';
 import { MOCK_CATALOG, MOCK_ROWS } from './data';
 import { runQueryEngine, QueryEngineError } from './queryEngine';
 import { delay, maybeThrow, MockApiError } from './errors';
 import { storageListReports, storageGetReport, storageSaveReport, storageDeleteReport } from './storage';
+import { storageGetColumnLabels, storageSetColumnLabel } from './labelStorage';
 import { csvEscape } from './csv';
 import { safeString } from '@/utils/safeString';
 
@@ -158,6 +160,18 @@ export async function saveReport(
 export async function deleteReport(id: string): Promise<void> {
   await delay();
   storageDeleteReport(id);
+}
+
+// Dremio exposes raw field names only, no display metadata — these let the
+// app layer on top of it define a human label per language for each column.
+export async function getColumnLabels(dataset: string): Promise<Record<string, ColumnLabel>> {
+  await delay();
+  return storageGetColumnLabels(dataset);
+}
+
+export async function setColumnLabel(dataset: string, column: string, label: ColumnLabel): Promise<void> {
+  await delay();
+  storageSetColumnLabel(dataset, column, label);
 }
 
 export async function exportCsv(def: ReportDefinition): Promise<Blob> {

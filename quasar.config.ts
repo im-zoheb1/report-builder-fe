@@ -48,6 +48,13 @@ export default defineConfig((ctx) => {
         // extendTsConfig (tsConfig) {}
       },
 
+      // vuedraggable (used in TableConfig.vue) relies on Vue's Options API
+      // internals (computed: { realList, getKey }) under the hood. Quasar
+      // strips Options API support by default, which silently breaks it
+      // (renders an empty list, "Property realList ... not defined on
+      // instance" warning) even though app code is all Composition API.
+      vueOptionsAPI: true,
+
       // https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
       // filenameBasedRouting: true,
 
@@ -98,7 +105,7 @@ export default defineConfig((ctx) => {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
     framework: {
       config: {
-        dark: 'auto',
+        dark: false,
       },
 
       // iconSet: 'material-icons', // Quasar icon set

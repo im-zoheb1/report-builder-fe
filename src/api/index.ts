@@ -11,4 +11,6 @@ export {
   saveReport,
   deleteReport,
   exportCsv,
+  getColumnLabels,
+  setColumnLabel,
 } from './mock/api';

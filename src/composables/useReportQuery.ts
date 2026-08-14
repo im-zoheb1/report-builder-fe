@@ -16,13 +16,20 @@ function keyPayload(def: ReportDefinition) {
   };
 }
 
+// definition is the live Pinia store proxy, not a plain object — structuredClone()
+// on a reactive Proxy can throw DataCloneError, so clone via JSON (ReportDefinition
+// is JSON-safe data by design, the same shape persisted to localStorage/mock API).
+function cloneDefinition(def: ReportDefinition): ReportDefinition {
+  return JSON.parse(JSON.stringify(def)) as ReportDefinition;
+}
+
 export function useReportQuery(definition: Ref<ReportDefinition>, params?: Ref<Record<string, unknown>>) {
-  const debounced = ref<ReportDefinition>(structuredClone(definition.value)) as Ref<ReportDefinition>;
+  const debounced = ref<ReportDefinition>(cloneDefinition(definition.value)) as Ref<ReportDefinition>;
 
   watchDebounced(
     definition,
     (val) => {
-      debounced.value = structuredClone(val);
+      debounced.value = cloneDefinition(val);
     },
     { debounce: 400, deep: true, immediate: true },
   );

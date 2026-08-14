@@ -70,8 +70,14 @@ export function makeFullName(rng: { pick: <T>(arr: readonly T[]) => T }): string
 
 export function makeNameList(count: number, rng: { pick: <T>(arr: readonly T[]) => T }): string[] {
   const names = new Set<string>();
+  let dupes = 0;
   while (names.size < count) {
-    names.add(makeFullName(rng));
+    const base = makeFullName(rng);
+    // FIRST_NAMES x LAST_NAMES has fewer combinations than large counts can
+    // request; once the pool is exhausted, disambiguate with a counter so
+    // this loop is guaranteed to terminate instead of spinning forever.
+    const name = names.has(base) ? `${base} ${++dupes}` : base;
+    names.add(name);
   }
   return Array.from(names);
 }
