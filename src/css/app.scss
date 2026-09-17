@@ -1,3 +1,79 @@
+@use 'tokens' as *;
+
 body {
-  background: #f2f2f2;
+  background: $surface;
+  color: $text;
+  font-family: $font-stack;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Quasar's typography defaults are Roboto-centric; the design is a tighter
+// Inter scale, so reset the bits Quasar sets on its own components.
+.q-page-container,
+.q-drawer,
+.q-dialog__inner {
+  font-family: $font-stack;
+}
+
+.rb-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: $text;
+}
+
+.rb-subtitle {
+  font-size: 13px;
+  color: $text-muted;
+}
+
+.rb-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: $text-muted;
+  text-transform: uppercase;
+}
+
+.rb-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+}
+
+// Quasar buttons carry Material uppercase + ripple padding the design doesn't use.
+.rb-btn.q-btn {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: $radius-md;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: none;
+
+  .q-btn__content {
+    gap: 6px;
+  }
+}
+
+.rb-input.q-field {
+  .q-field__control {
+    height: 32px;
+    min-height: 32px;
+    border-radius: $radius-md;
+    padding: 0 10px;
+  }
+
+  .q-field__native {
+    font-size: 13px;
+    color: $text;
+    padding: 0;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+  }
+
+  .q-field__marginal {
+    height: 32px;
+    color: $text-muted;
+  }
 }
